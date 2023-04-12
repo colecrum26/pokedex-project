@@ -17,4 +17,9 @@ function Pokedex(props) {
             console.error(err);
         });
     }
+
+
+    useEffect(() => {
+        getPokemon();
+    }, {});
 }

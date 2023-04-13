@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useTypesAndWeaknesses, filterPokemon } from "../utils/filter";
-import { Link } from "react-router-dom";
 
 function Pokedex(props) {
     const [list, setList] = useState([]);
@@ -8,6 +7,7 @@ function Pokedex(props) {
     const [searchName, setSearchName] = useState("");
     const [searchType, setSearchType] = useState("");
     const [searchWeakness, setSearchWeakness] = useState("");
+    const { types, weaknesses } = useTypesAndWeaknesses(list);
 
     function getPokemon() {
         fetch("https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json")
@@ -33,29 +33,56 @@ function Pokedex(props) {
         <div>
             <label htmlFor="searchName">Search Pokemon By Name</label>
             <input type="text" value={searchName} onChange={(e) => {setSearchName(e.target.value)}} />
+            
             <label htmlFor="searchType">Search Pokemon By Type</label>
-            <input type="text" value={searchType} onChange={(e) => {setSearchName(e.target.value)}} />
+            <select 
+            name="searchType"
+            id="searchType"
+            value={searchType} 
+            onChange={(e) => setSearchType(e.target.value)}>
+                
+              {types.map((type, index) => {
+                return (
+                    <option key={index} value={type}>
+                        {type}
+                    </option>
+                    ); 
+                })}  
+            </select>
+           
             <label htmlFor="searchWeakness">Search Pokemon By Weakness</label>
-            <input type="text" value={searchWeakness} onChange={(e) => {setSearchName(e.target.value)}} />
+            <select 
+            name="searchWeakness"
+            id="searchWeakness" 
+            value={searchWeakness} 
+            onChange={(e) => setSearchWeakness(e.target.value)} >
+                {weaknesses.map((weakness, index) => {
+                return (
+                    <option key={index} value={weakness}>
+                        {weakness}
+                    </option>
+                    ); 
+                })}  
+            </select>
+
             {displayList.map((pokemon) => {
                 return (
-                    <li>
-                        {pokemon.name}
-                    </li>
-                )
-            })}
-            {displayList.map((pokemon) => {
-                return (
-                    <li>
-                        {pokemon.type}
-                    </li>
-                )
-            })}
-            {displayList.map((pokemon) => {
-                return (
-                    <li>
-                        {pokemon.weaknesses}
-                    </li>
+                    <div key={pokemon.id}>
+                        <h3>{pokemon.name}</h3>
+                        <img src={pokemon.img} alt="" />
+                        <p>Type:</p>
+                        <ul>
+                        {pokemon.type.map((type, index) => (
+                            <li key={index + pokemon.id + type}>{type}</li>
+                        ))}
+                        </ul>
+                        <p>Weakness(es):</p>
+                        <ul>
+                        {pokemon.weaknesses.map((weakness, index) => (
+                            <li key={index + pokemon.id + weakness}>{weakness}</li>
+                        ))}
+                        </ul>
+                    </div>
                 )
             })}
         </div>

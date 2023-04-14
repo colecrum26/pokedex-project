@@ -4,11 +4,14 @@ export function useTypesAndWeaknesses(list) {
     const [values, setValues] = useState({});
 
     useEffect(() => {
-        let result = list.reduce((acc, pokemon) => {
+        let result = list.reduce(
+            (acc, pokemon) => {
             acc.types = acc.types.concat(pokemon.type)
             acc.weaknesses = acc.weaknesses.concat(pokemon.weaknesses)
             return acc;
-        }, {types: [], weaknesses: []})
+        }, 
+        {types: [], weaknesses: []}
+        )
         setValues({
             types: ["", ...new Set(result.types)],
             weaknesses: ["", ...new Set(result.weaknesses)]

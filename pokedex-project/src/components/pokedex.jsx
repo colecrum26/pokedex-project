@@ -3,11 +3,13 @@ import { useTypesAndWeaknesses, filterPokemon } from "../utils/filter";
 
 function Pokedex(props) {
     const [list, setList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
     const [limit, setLimit] = useState();
     const [searchName, setSearchName] = useState("");
     const [searchType, setSearchType] = useState("");
     const [searchWeakness, setSearchWeakness] = useState("");
     const { types, weaknesses } = useTypesAndWeaknesses(list);
+    
 
     function getPokemon() {
         fetch("https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json")
@@ -15,19 +17,24 @@ function Pokedex(props) {
             return res.json();
         })
         .then((result) => {
-            console.log(result)
             setList(result.pokemon);
         })
         .catch((err) => {
             console.error(err);
-        });
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
     }
-
+    
     useEffect(() => {
         getPokemon();
     }, []);
 
     let displayList = filterPokemon(list, searchName, searchType, searchWeakness, limit);
+    if (isLoading) {
+        return <h1>Loading...</h1>
+    }
 
     return (
         <div>
@@ -40,7 +47,6 @@ function Pokedex(props) {
             id="searchType"
             value={searchType} 
             onChange={(e) => setSearchType(e.target.value)}>
-                
               {types.map((type, index) => {
                 return (
                     <option key={index} value={type}>

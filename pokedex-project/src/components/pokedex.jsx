@@ -3,8 +3,7 @@ import { useTypesAndWeaknesses, filterPokemon } from "../utils/filter";
 
 function Pokedex(props) {
     const [list, setList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true)
-    const [limit, setLimit] = useState();
+    const [isLoading, setIsLoading] = useState(true);
     const [searchName, setSearchName] = useState("");
     const [searchType, setSearchType] = useState("");
     const [searchWeakness, setSearchWeakness] = useState("");
@@ -31,13 +30,14 @@ function Pokedex(props) {
         getPokemon();
     }, []);
 
-    let displayList = filterPokemon(list, searchName, searchType, searchWeakness, limit);
+    let displayList = filterPokemon(list, searchName, searchType, searchWeakness);
     if (isLoading) {
         return <h1>Loading...</h1>
     }
 
     return (
         <div>
+            <div id="searchBars">
             <label htmlFor="searchName">Search Pokemon By Name</label>
             <input type="text" value={searchName} onChange={(e) => {setSearchName(e.target.value)}} />
             
@@ -70,10 +70,11 @@ function Pokedex(props) {
                     ); 
                 })}  
             </select>
+            </div>
 
             {displayList.map((pokemon) => {
                 return (
-                    <div key={pokemon.id}>
+                    <div key={pokemon.id} id="pokemonInd">
                         <h3>{pokemon.name}</h3>
                         <img src={pokemon.img} alt="" />
                         <p>Type:</p>
@@ -82,6 +83,7 @@ function Pokedex(props) {
                             <li key={index + pokemon.id + type}>{type}</li>
                         ))}
                         </ul>
+                        
                         <p>Weakness(es):</p>
                         <ul>
                         {pokemon.weaknesses.map((weakness, index) => (

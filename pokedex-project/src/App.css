@@ -26,14 +26,10 @@ body {
 #pokemonInd {
   display: flex;
   flex-direction: column;
-  justify-content: left;
   align-items: center;
   border-style: groove;
   border-color: white;
   margin: 40px;
-}
-
-.App-link {
-  color: #61dafb;
+  width: 400px;
 }
 
